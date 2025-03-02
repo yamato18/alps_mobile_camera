@@ -1,5 +1,5 @@
 // バージョン
-const VERSION = "0.1.2"
+const VERSION = "0.1.3"
 
 // キャッシュ名
 const CACHE_NAME  = `ALPS-Mobile-Camera-${VERSION}`;
@@ -10,6 +10,7 @@ const CACHE_FILES = [
     "style.css",
     "script.js",
     "app.js",
+    "roslib.min.js",
 	"manifest.json",
 	"icons/apple-touch-icon.png",
 	"icons/favicon.ico",
