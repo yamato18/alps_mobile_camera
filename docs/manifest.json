@@ -2,7 +2,7 @@
     "name"              : "ALPS Mobile Camera",
     "short_name"        : "ALPS Camera",
     "description"       : "ALPS Mobile Camera",
-    "start_url"         : "/",
+    "start_url"         : "index.html",
     "display"           : "standalone",
     "background_color"  : "#fff",
     "theme_color"       : "#fff",
