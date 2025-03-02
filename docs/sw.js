@@ -1,5 +1,5 @@
 // バージョン
-const VERSION = "0.1.7"
+const VERSION = "0.1.8"
 
 // キャッシュ名
 const CACHE_NAME  = `ALPS-Mobile-Camera-${VERSION}`;
