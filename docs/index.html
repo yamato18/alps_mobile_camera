@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <title>ALPS Mobile Camera</title>
+        <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+        <link rel="icon" href="icons/favicon.ico">
+        <link rel="stylesheet" href="style.css">
+        <link rel="manifest" href="manifest.json">
+    </head>
+    <body>
+        <!-- タイトルバー -->
+        <div class="title-bar">
+            <div class="title g-padding g-flex">ALPS Mobile Camera</div>
+            <div id="sw-version" class="g-end g-flex">Ver. N/A</div>
+            <div id="status" class="g-padding g-flex">🟡【ROS接続状況】未接続（wss://localhost:9090 ID=10）</div>
+        </div>
+
+        <div class="g-margin">
+            <!-- カメラ映像表示部分 -->
+            <video id="camera" autoplay playsinline></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <div class="large-btn">
+                <input type="button" value="送信" id="send-btn" class="ctrl-btn">
+            </div>
+
+            <!-- 設定部分 -->
+            <div id="line">
+                <hr class="mpart">
+            </div>
+            <div class="ip-input g-padding">
+                <select name="protocol" id="protocol">
+                    <option value="ws">ws://</option>
+                    <option value="wss" selected>wss://</option>
+                </select>
+                <label for="ip">IP: </label>
+                <input type="text" id="ip" value="localhost">
+                <label for="port">Port: </label>
+                <input type="number" name="port" id="port" value="9090">
+                <label for="ros_domain_id">ID: </label>
+                <input type="number" name="ros_domain_id" id="ros_domain_id" value="10">
+                <input type="button" value="接続" id="connect">
+                <input type="button" value="R1" id="connect_R1">
+                <input type="button" value="R2" id="connect_R2">
+                <input type="button" value="試験" id="connect_Test">
+                <input type="button" value="情報" id="info">
+            </div>
+        </div>
+    </body>
+</html>
