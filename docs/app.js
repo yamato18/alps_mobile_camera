@@ -66,7 +66,7 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
     };
 
     document.getElementById("send-btn").addEventListener("click", () => {
-        setInterval(sendImage, 50);
+        setInterval(sendImage, 1000);
     });
 }
 
