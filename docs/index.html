@@ -23,8 +23,10 @@
 
     <div class="g-margin">
         <!-- カメラ映像表示部分 -->
-        <video id="camera" autoplay playsinline></video>
-        <canvas id="canvas" style="display:none;"></canvas>
+        <div class="camera-area">
+            <video id="camera" autoplay playsinline></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+        </div>
         <div class="large-btn">
             <input type="button" value="開始" id="send-btn" class="ctrl-btn">
         </div>

@@ -4,7 +4,7 @@ body {
 }
 
 video {
-    max-width: 90%;
+    max-width: 96%;
 }
 
 label {
@@ -58,6 +58,10 @@ select {
 .title {
     font-size: 32px;
     font-weight: bold;
+    text-align: center;
+}
+
+.camera-area {
     text-align: center;
 }
 
