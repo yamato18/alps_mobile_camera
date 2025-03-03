@@ -56,7 +56,9 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     // リアカメラ
-                    facingMode: "environment"
+                    facingMode: "environment",
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
                 }
             });
 
