@@ -38,7 +38,7 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
 
     // カメラ映像を取得（リアカメラ）
     const video = document.getElementById("camera");
-    navigator.mediaDevices.getDisplayMedia({ video: { facingMode: "environment" } })
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
         .then(stream => video.srcObject = stream)
         .catch(error => console.error("【ERROR】", error));
 
@@ -57,7 +57,8 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
             reader.onloadend = () => {
                 const base64data = reader.result.split(",")[1];
                 const image_msg = new ROSLIB.Message({
-                    format: "jpeg", data: base64data
+                    format: "jpeg",
+                    data: base64data
                 })
                 image.publish(image_msg);
             };
