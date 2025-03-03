@@ -46,7 +46,7 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
     let intervalID = null;
 
     const startCamera = async () => {
-        document.getElementById("send-btn").textContent = "終了";
+        document.getElementById("send-btn").value = "終了";
 
         try {
             if (stream) return;
@@ -67,7 +67,7 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
             intervalID = setInterval(() => {
                 const canvas = document.getElementById("canvas");
                 const ctx = canvas.getContext("2d");
-                
+
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -107,7 +107,7 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
         }
     
         isSending = false;
-        document.getElementById("send-btn").textContent = "開始";
+        document.getElementById("send-btn").value = "開始";
     }
 
     document.getElementById("send-btn").addEventListener("click", () => {
