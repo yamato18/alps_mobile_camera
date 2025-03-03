@@ -1,8 +1,12 @@
+let ros = null;
+
 // ROS接続
 const connectROS = (protocol, ip, port, ros_domain_id) => {
 
+    if (ros) return;
+
     // roslib.js
-    const ros = new ROSLIB.Ros({
+    ros = new ROSLIB.Ros({
         url: `${protocol}://${ip}:${port}`,
         options: {
             ros_domain_id: ros_domain_id
@@ -27,6 +31,7 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
         const status = document.getElementById("status");
         status.textContent = `🟡【ROS接続状況】未接続（${protocol}://${ip}:${port} ID=${ros_domain_id}）`;
         console.log("【INFO】Connection closed");
+        ros = null;
     });
 
     // CompressedImage型
@@ -36,38 +41,79 @@ const connectROS = (protocol, ip, port, ros_domain_id) => {
         messageType: "sensor_msgs/msg/CompressedImage"
     });
 
-    // カメラ映像を取得（リアカメラ）
-    const video = document.getElementById("camera");
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-        .then(stream => video.srcObject = stream)
-        .catch(error => console.error("【ERROR】", error));
+    let stream = null;
+    let isSending = false;
+    let intervalID = null;
 
-    // 画像送信処理
-    const sendImage = () => {
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
+    const startCamera = async () => {
+        try {
+            if (stream) return;
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // カメラ映像を取得
+            const video = document.getElementById("camera");
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    // リアカメラ
+                    facingMode: "environment"
+                }
+            });
 
-        // JPEGエンコード
-        canvas.toBlob(blob => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64data = reader.result.split(",")[1];
-                const image_msg = new ROSLIB.Message({
-                    format: "jpeg",
-                    data: base64data
-                })
-                image.publish(image_msg);
-            };
-            reader.readAsDataURL(blob);
-        }, "image/jpeg");
-    };
+            isSending = true;
+            document.getElementById("send-btn").textContent = "終了";
+
+            video.srcObject = stream;
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            intervalID = setInterval(() => {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // JPEGエンコード
+                canvas.toBlob(blob => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64data = reader.result.split(",")[1];
+                        const image_msg = new ROSLIB.Message({
+                            format: "jpeg",
+                            data: base64data
+                        })
+                        image.publish(image_msg);
+                    };
+                    reader.readAsDataURL(blob);
+                }, "image/jpeg");
+
+            }, 1000);
+            // 1000[ms]
+
+        } catch (error) {
+            console.error("【ERROR】", error)
+        }
+    }
+
+    const stopCamera = () => {
+        if (intervalID) {
+            clearInterval(intervalID);
+            intervalID = null;
+        }
+    
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            document.getElementById("camera").srcObject = null;
+            stream = null;
+        }
+    
+        isSending = false;
+        document.getElementById("send-btn").textContent = "開始";
+    }
 
     document.getElementById("send-btn").addEventListener("click", () => {
-        setInterval(sendImage, 1000);
+        if (isSending) {
+            stopCamera();
+        } else {
+            startCamera();
+        }
     });
 }
 
